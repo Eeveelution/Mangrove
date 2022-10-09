@@ -96,8 +96,10 @@ func (lexer *Lexer) NextToken() token.Token {
 
 			return tok
 		} else if isDigit(lexer.char) {
-			tok.Type = token.INT
-			tok.Literal = lexer.readNumber()
+			numLiteral, numType := lexer.readNumber()
+
+			tok.Literal = numLiteral
+			tok.Type = numType
 
 			return tok
 		} else {
@@ -122,14 +124,27 @@ func (lexer *Lexer) readIdentifier() string {
 	return lexer.input[position:lexer.position]
 }
 
-func (lexer *Lexer) readNumber() string {
+func (lexer *Lexer) readNumber() (literal string, tokenType token.TokenType) {
 	position := lexer.position
 
-	for isDigit(lexer.char) {
-		lexer.readChar()
+	numberTokenType := token.INT
+
+	for {
+		if isDigit(lexer.char) {
+			lexer.readChar()
+		} else if lexer.char == '.' {
+			numberTokenType = token.DOUBLE
+			lexer.readChar()
+		} else if lexer.char == 'f' {
+			numberTokenType = token.FLOAT
+			lexer.readChar()
+			break
+		} else {
+			break
+		}
 	}
 
-	return lexer.input[position:lexer.position]
+	return lexer.input[position:lexer.position], token.TokenType(numberTokenType)
 }
 
 func canBeInIdentifier(char byte, identifierBeginning bool) bool {

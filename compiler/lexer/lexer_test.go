@@ -9,6 +9,9 @@ func TestNextToken(t *testing.T) {
 	input := `
 
 func main<args: str[]>: uint32 {
+	var testFloat: float = 44.561f;
+	var testDouble: double = 88.121;
+
 	var testFunction: <>: uint32 {
 		return 3;
 	}
@@ -42,6 +45,23 @@ func main<args: str[]>: uint32 {
 		{token.COLON, ":"}, //10
 		{token.TYPE_UINT32, "uint32"},
 		{token.LBRACE, "{"},
+
+		{token.VARIABLE, "var"},
+		{token.IDENTIFIER, "testFloat"},
+		{token.COLON, ":"},
+		{token.TYPE_FLOAT, "float"},
+		{token.ASSIGN, "="},
+		{token.FLOAT, "44.561f"},
+		{token.SEMICOLON, ";"},
+
+		{token.VARIABLE, "var"}, //20
+		{token.IDENTIFIER, "testDouble"},
+		{token.COLON, ":"},
+		{token.TYPE_DOUBLE, "double"},
+		{token.ASSIGN, "="},
+		{token.DOUBLE, "88.121"},
+		{token.SEMICOLON, ";"},
+
 		{token.VARIABLE, "var"},
 		{token.IDENTIFIER, "testFunction"},
 		{token.COLON, ":"},
@@ -50,10 +70,13 @@ func main<args: str[]>: uint32 {
 		{token.COLON, ":"},
 		{token.TYPE_UINT32, "uint32"},
 		{token.LBRACE, "{"}, //20
+
 		{token.RETURN, "return"},
 		{token.INT, "3"},
 		{token.SEMICOLON, ";"},
+
 		{token.RBRACE, "}"},
+
 		{token.VARIABLE, "var"},
 		{token.IDENTIFIER, "returnDouble"},
 		{token.COLON, ":"},
@@ -65,17 +88,21 @@ func main<args: str[]>: uint32 {
 		{token.COLON, ":"},
 		{token.TYPE_UINT32, "uint32"},
 		{token.LBRACE, "{"},
+
 		{token.RETURN, "return"},
 		{token.IDENTIFIER, "num"},
 		{token.MULTIPLICATION, "*"},
 		{token.INT, "2"},
 		{token.SEMICOLON, ";"}, //40
+
 		{token.RBRACE, "}"},
+
 		{token.VARIABLE, "var"},
 		{token.IDENTIFIER, "finalNumber"},
 		{token.COLON, ":"},
 		{token.TYPE_UINT32, "uint32"},
 		{token.SEMICOLON, ";"},
+
 		{token.IDENTIFIER, "testFunction"},
 		{token.LPARENTHESIS, "("},
 		{token.RPARENTHESIS, ")"},
@@ -86,16 +113,18 @@ func main<args: str[]>: uint32 {
 		{token.GREATER_THAN, ">"},
 		{token.IDENTIFIER, "finalNumber"},
 		{token.SEMICOLON, ";"},
+
 		{token.RETURN, "return"},
 		{token.IDENTIFIER, "finalNumber"},
 		{token.SEMICOLON, ";"},
+
 		{token.RBRACE, "}"}, //60
 	}
 
 	lexer := CreateNewLexer(input)
 
 	for i, test := range tests {
-		if i == 21 {
+		if i == 25 {
 			i := 0
 			i = i
 		}

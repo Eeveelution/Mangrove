@@ -14,6 +14,9 @@ const (
 	//Identifiers and literals
 	IDENTIFIER = "IDENTIFIER"
 	INT        = "INT"
+	BYTE       = "BYTE"
+	DOUBLE     = "DOUBLE"
+	FLOAT      = "FLOAT"
 
 	//Operators
 	ASSIGN         = "="
@@ -49,6 +52,8 @@ const (
 	TYPE_VOID   = "VOID"
 	TYPE_UINT32 = "UINT32"
 	TYPE_STR    = "STR"
+	TYPE_FLOAT  = "TDOUBLE"
+	TYPE_DOUBLE = "TFLOAT"
 )
 
 var keywords = map[string]TokenType{
@@ -58,6 +63,8 @@ var keywords = map[string]TokenType{
 	"void":   TYPE_VOID,
 	"uint32": TYPE_UINT32,
 	"str":    TYPE_STR,
+	"float":  TYPE_FLOAT,
+	"double": TYPE_DOUBLE,
 }
 
 func LookupIdentifier(identifier string) TokenType {
