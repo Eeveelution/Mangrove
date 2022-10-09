@@ -1,7 +1,7 @@
-package lexer
+package analysis
 
 import (
-	"mangrove/compiler/lexer/token"
+	"mangrove/compiler/analysis/token"
 	"testing"
 )
 
@@ -25,9 +25,8 @@ func main<args: str[]>: uint32 {
 	testFunction() |> returnDouble |> finalNumber;
 
 	return finalNumber;
-}	
-
-	`
+}
+`
 
 	tests := []struct {
 		expectedType    token.TokenType
@@ -42,7 +41,7 @@ func main<args: str[]>: uint32 {
 		{token.LBRACKET, "["},
 		{token.RBRACKET, "]"},
 		{token.GREATER_THAN, ">"},
-		{token.COLON, ":"}, //10
+		{token.COLON, ":"},
 		{token.TYPE_UINT32, "uint32"},
 		{token.LBRACE, "{"},
 
@@ -54,7 +53,7 @@ func main<args: str[]>: uint32 {
 		{token.FLOAT, "44.561f"},
 		{token.SEMICOLON, ";"},
 
-		{token.VARIABLE, "var"}, //20
+		{token.VARIABLE, "var"},
 		{token.IDENTIFIER, "testDouble"},
 		{token.COLON, ":"},
 		{token.TYPE_DOUBLE, "double"},
@@ -65,11 +64,10 @@ func main<args: str[]>: uint32 {
 		{token.VARIABLE, "var"},
 		{token.IDENTIFIER, "testFunction"},
 		{token.COLON, ":"},
-		{token.LESS_THAN, "<"},
-		{token.GREATER_THAN, ">"},
+		{token.EMPTY_PARAMETER_LIST, "<>"},
 		{token.COLON, ":"},
 		{token.TYPE_UINT32, "uint32"},
-		{token.LBRACE, "{"}, //20
+		{token.LBRACE, "{"},
 
 		{token.RETURN, "return"},
 		{token.INT, "3"},
@@ -82,7 +80,7 @@ func main<args: str[]>: uint32 {
 		{token.COLON, ":"},
 		{token.LESS_THAN, "<"},
 		{token.IDENTIFIER, "num"},
-		{token.COLON, ":"}, //30
+		{token.COLON, ":"},
 		{token.TYPE_UINT32, "uint32"},
 		{token.GREATER_THAN, ">"},
 		{token.COLON, ":"},
@@ -91,9 +89,9 @@ func main<args: str[]>: uint32 {
 
 		{token.RETURN, "return"},
 		{token.IDENTIFIER, "num"},
-		{token.MULTIPLICATION, "*"},
+		{token.ASTERISK, "*"},
 		{token.INT, "2"},
-		{token.SEMICOLON, ";"}, //40
+		{token.SEMICOLON, ";"},
 
 		{token.RBRACE, "}"},
 
@@ -106,11 +104,9 @@ func main<args: str[]>: uint32 {
 		{token.IDENTIFIER, "testFunction"},
 		{token.LPARENTHESIS, "("},
 		{token.RPARENTHESIS, ")"},
-		{token.BINARY_OR, "|"}, //50
-		{token.GREATER_THAN, ">"},
+		{token.PIPE_SINGLE, "|>"},
 		{token.IDENTIFIER, "returnDouble"},
-		{token.BINARY_OR, "|"},
-		{token.GREATER_THAN, ">"},
+		{token.PIPE_SINGLE, "|>"},
 		{token.IDENTIFIER, "finalNumber"},
 		{token.SEMICOLON, ";"},
 
@@ -118,7 +114,7 @@ func main<args: str[]>: uint32 {
 		{token.IDENTIFIER, "finalNumber"},
 		{token.SEMICOLON, ";"},
 
-		{token.RBRACE, "}"}, //60
+		{token.RBRACE, "}"},
 	}
 
 	lexer := CreateNewLexer(input)
