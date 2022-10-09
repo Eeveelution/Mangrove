@@ -11,6 +11,7 @@ func TestNextToken(t *testing.T) {
 func main<args: str[]>: uint32 {
 	var testFloat: float = 44.561f;
 	var testDouble: double = 88.121;
+	var testString: str = "Hello, World!";
 
 	var testFunction: <>: uint32 {
 		return 3;
@@ -59,6 +60,14 @@ func main<args: str[]>: uint32 {
 		{token.TYPE_DOUBLE, "double"},
 		{token.ASSIGN, "="},
 		{token.DOUBLE, "88.121"},
+		{token.SEMICOLON, ";"},
+
+		{token.VARIABLE, "var"},
+		{token.IDENTIFIER, "testString"},
+		{token.COLON, ":"},
+		{token.TYPE_STR, "str"},
+		{token.ASSIGN, "="},
+		{token.STRING, "\"Hello, World!\""},
 		{token.SEMICOLON, ";"},
 
 		{token.VARIABLE, "var"},
@@ -120,8 +129,8 @@ func main<args: str[]>: uint32 {
 	lexer := CreateNewLexer(input)
 
 	for i, test := range tests {
-		if i == 25 {
-			i := 0
+		if i == 31 {
+			i := 06
 			i = i
 		}
 

@@ -17,6 +17,7 @@ const (
 	BYTE       = "BYTE"
 	DOUBLE     = "DOUBLE"
 	FLOAT      = "FLOAT"
+	STRING     = "STRING"
 
 	//Operators
 	ASSIGN       = "="
