@@ -25,4 +25,16 @@ func TestNextToken(t *testing.T) {
 	}
 
 	lexer := CreateNewLexer(input)
+
+	for i, test := range tests {
+		tok := lexer.NextToken()
+
+		if tok.Type != test.expectedType {
+			t.Fatalf("tests[%d] - tok.Type wrong. Expected: %q, Got: %q", i, test.expectedType, tok.Type)
+		}
+
+		if tok.Literal != test.expectedLiteral {
+			t.Fatalf("tests[%d] - tok.Literal wrong. Expected: %q, Got: %q", i, test.expectedLiteral, tok.Literal)
+		}
+	}
 }
