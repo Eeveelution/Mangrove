@@ -7,11 +7,15 @@ type Lexer struct {
 	position     int    //Position in the input (points to current char)
 	readPosition int    //Current reading position in input (points to current char + 1)
 	char         byte   //Current Char under examination
+
+	Line   int
+	Column int
 }
 
 func CreateNewLexer(input string) *Lexer {
 	lexer := &Lexer{
 		input: input,
+		Line:  1,
 	}
 
 	lexer.readChar()
@@ -28,12 +32,16 @@ func (lexer *Lexer) readChar() {
 
 	lexer.position = lexer.readPosition
 	lexer.readPosition += 1
+
+	lexer.Column += 1
 }
 
-func newToken(tokenType token.TokenType, char byte) token.Token {
+func (lexer *Lexer) newToken(tokenType token.TokenType, char byte) token.Token {
 	return token.Token{
 		Type:    tokenType,
 		Literal: string(char),
+		Line:    lexer.Line,
+		Column:  lexer.Column,
 	}
 }
 
@@ -42,33 +50,36 @@ func (lexer *Lexer) NextToken() token.Token {
 
 	lexer.skipWhitespace()
 
+	tok.Line = lexer.Line
+	tok.Column = lexer.Column
+
 	switch lexer.char {
 
 	case '?':
-		tok = newToken(token.QUESTIONMARK, lexer.char)
+		tok = lexer.newToken(token.QUESTIONMARK, lexer.char)
 	case '$':
-		tok = newToken(token.DOLLAR_SIGN, lexer.char)
+		tok = lexer.newToken(token.DOLLAR_SIGN, lexer.char)
 	case '#':
-		tok = newToken(token.HASH_SIGN, lexer.char)
+		tok = lexer.newToken(token.HASH_SIGN, lexer.char)
 	case ',':
-		tok = newToken(token.COMMA, lexer.char)
+		tok = lexer.newToken(token.COMMA, lexer.char)
 	case ';':
-		tok = newToken(token.SEMICOLON, lexer.char)
+		tok = lexer.newToken(token.SEMICOLON, lexer.char)
 	case ':':
-		tok = newToken(token.COLON, lexer.char)
+		tok = lexer.newToken(token.COLON, lexer.char)
 
 	case '(':
-		tok = newToken(token.LPARENTHESIS, lexer.char)
+		tok = lexer.newToken(token.LPARENTHESIS, lexer.char)
 	case ')':
-		tok = newToken(token.RPARENTHESIS, lexer.char)
+		tok = lexer.newToken(token.RPARENTHESIS, lexer.char)
 	case '{':
-		tok = newToken(token.LBRACE, lexer.char)
+		tok = lexer.newToken(token.LBRACE, lexer.char)
 	case '}':
-		tok = newToken(token.RBRACE, lexer.char)
+		tok = lexer.newToken(token.RBRACE, lexer.char)
 	case '[':
-		tok = newToken(token.LBRACKET, lexer.char)
+		tok = lexer.newToken(token.LBRACKET, lexer.char)
 	case ']':
-		tok = newToken(token.RBRACKET, lexer.char)
+		tok = lexer.newToken(token.RBRACKET, lexer.char)
 	case '"':
 		tok.Type = token.STRING
 		tok.Literal = lexer.readString()
@@ -100,7 +111,7 @@ func (lexer *Lexer) NextToken() token.Token {
 
 			return tok
 		} else {
-			tok = newToken(token.ILLEGAL, lexer.char)
+			tok = lexer.newToken(token.ILLEGAL, lexer.char)
 		}
 	}
 
@@ -119,6 +130,11 @@ func (lexer *Lexer) peekChar() byte {
 
 func (lexer *Lexer) skipWhitespace() {
 	for lexer.char == ' ' || lexer.char == '\t' || lexer.char == '\n' || lexer.char == '\r' {
+		if lexer.char == '\n' {
+			lexer.Line += 1
+			lexer.Column = 0
+		}
+
 		lexer.readChar()
 	}
 }
