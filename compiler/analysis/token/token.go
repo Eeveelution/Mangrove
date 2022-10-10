@@ -86,12 +86,24 @@ const (
 	FOR      = "FOR"
 	SWITCH   = "SWITCH"
 	CASE     = "CASE"
+	BREAK    = "BREAK"
 	DEFAULT  = "DEFAULT"
 
 	//Types
-	TYPE_VOID   = "T_VOID"
+	TYPE_VOID = "T_VOID"
+
+	TYPE_CHAR   = "T_CHAR"
+	TYPE_UINT8  = "T_UINT8"
+	TYPE_UINT16 = "T_UINT16"
 	TYPE_UINT32 = "T_UINT32"
-	TYPE_STR    = "T_STR"
+	TYPE_UINT64 = "T_UINT64"
+	TYPE_INT8   = "T_INT8"
+	TYPE_INT16  = "T_INT16"
+	TYPE_INT32  = "T_INT32"
+	TYPE_INT64  = "T_INT64"
+
+	TYPE_STR = "T_STR"
+
 	TYPE_FLOAT  = "T_TDOUBLE"
 	TYPE_DOUBLE = "T_FLOAT"
 
@@ -107,19 +119,28 @@ var keywords = map[string]TokenType{
 	"var":     VARIABLE,
 	"return":  RETURN,
 	"void":    TYPE_VOID,
+	"char":    TYPE_CHAR,
+	"uint8":   TYPE_UINT8,
+	"uint16":  TYPE_UINT16,
 	"uint32":  TYPE_UINT32,
+	"uint64":  TYPE_UINT64,
+	"int8":    TYPE_INT8,
+	"int16":   TYPE_INT16,
+	"int32":   TYPE_INT32,
+	"int64":   TYPE_INT64,
 	"str":     TYPE_STR,
 	"float":   TYPE_FLOAT,
 	"double":  TYPE_DOUBLE,
-	"if":      TYPE_DOUBLE,
-	"else":    TYPE_DOUBLE,
-	"true":    TYPE_DOUBLE,
-	"false":   TYPE_DOUBLE,
-	"while":   TYPE_DOUBLE,
-	"for":     TYPE_DOUBLE,
-	"switch":  TYPE_DOUBLE,
-	"case":    TYPE_DOUBLE,
-	"default": TYPE_DOUBLE,
+	"if":      IF,
+	"else":    ELSE,
+	"true":    TRUE,
+	"false":   FALSE,
+	"while":   WHILE,
+	"for":     FOR,
+	"switch":  SWITCH,
+	"case":    CASE,
+	"break":   BREAK,
+	"default": DEFAULT,
 }
 
 func LookupIdentifier(identifier string) TokenType {

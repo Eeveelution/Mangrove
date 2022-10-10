@@ -60,6 +60,7 @@ func isOperatorSymbol(char byte) bool {
 		char == '^' ||
 		char == '&' ||
 		char == '%' ||
+		char == ':' ||
 		char == '!'
 }
 
@@ -78,6 +79,8 @@ func (lexer *Lexer) readOperator() (literal string, tokenType token.TokenType) {
 	}
 
 	switch operator {
+	case ":":
+		operatorType = token.COLON
 	case "=":
 		operatorType = token.ASSIGN
 	case "+":
@@ -140,6 +143,8 @@ func (lexer *Lexer) readOperator() (literal string, tokenType token.TokenType) {
 		operatorType = token.PIPE_MULTIPLE
 	case "<>":
 		operatorType = token.EMPTY_PARAMETER_LIST
+	case "::":
+		operatorType = token.NAMESPACE
 	}
 
 	return operator, operatorType

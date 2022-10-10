@@ -4,7 +4,9 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"mangrove/compiler/analysis/token"
 	"os"
+	"strconv"
 	"time"
 )
 
@@ -22,4 +24,10 @@ func InitializeLogger() {
 	multiWriter := io.MultiWriter(file, os.Stdout)
 
 	Logger = log.New(multiWriter, "Mangrove Debug: ", log.LstdFlags)
+}
+
+func FatalUnexpectedTokenError(err int32, tok token.Token, message string, v ...any) {
+	Logger.Fatalf("Unexpected Token '"+tok.Literal+"' on Line "+strconv.FormatInt(int64(tok.Line), 10)+" Column "+strconv.FormatInt(int64(tok.Line), 10)+"\n"+
+		message,
+		v)
 }

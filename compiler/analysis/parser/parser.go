@@ -32,7 +32,7 @@ func CreateNewParser(lexer *analysis.Lexer) *Parser {
 }
 
 func (parser *Parser) PeekNextToken() token.Token {
-	return parser.tokens[parser.position+1]
+	return parser.tokens[parser.readPosition]
 }
 
 func (parser *Parser) NextToken() {
@@ -60,6 +60,7 @@ func (parser *Parser) NextExpression() Expression {
 		switch tok.Type {
 		case token.VARIABLE:
 			expression = parser.ParseVariableDeclarationExpression()
+			return expression
 		}
 	}
 
