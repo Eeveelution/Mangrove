@@ -49,19 +49,33 @@ func (parser *Parser) NextToken() {
 func (parser *Parser) NextExpression() Expression {
 	var expression Expression
 	var tok token.Token
+	var subexpressionPossible bool
 
-	for {
-		tok = parser.PeekNextToken()
+	tok = parser.PeekNextToken()
 
-		if tok.Type == token.EOF {
-			break
-		}
+	if tok.Type == token.EOF {
+		break
+	}
 
-		switch tok.Type {
-		case token.VARIABLE:
-			expression = parser.ParseVariableDeclarationExpression()
-			return expression
-		}
+	switch tok.Type {
+	case token.TYPE_UINT8 :
+		expression = &NumberExpession{Token: tok }
+	case token.TYPE_UINT16:
+		expression = &NumberExpession{Token: tok }
+	case token.TYPE_UINT32:
+		expression = &NumberExpession{Token: tok }
+	case token.TYPE_UINT64:
+		expression = &NumberExpession{Token: tok }
+	case token.TYPE_INT8  :
+		expression = &NumberExpession{Token: tok }
+	case token.TYPE_INT16 :
+		expression = &NumberExpession{Token: tok }
+	case token.TYPE_INT32 :
+		expression = &NumberExpession{Token: tok }
+	case token.TYPE_INT64 :
+		expression = &NumberExpession{Token: tok }
+	case token.VARIABLE:
+		expression = parser.ParseVariableDeclarationExpression()
 	}
 
 	return expression
