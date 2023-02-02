@@ -60,6 +60,8 @@ public enum TokenType {
     RightBrace,
     LeftBracket,
     RightBracket,
+    LeftAngleBracket,
+    RightAngleBracket,
     Quote,
 
     //Keywords

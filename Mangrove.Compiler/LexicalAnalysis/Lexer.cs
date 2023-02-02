@@ -18,7 +18,7 @@ public class Lexer {
         if (this.ReadPosition >= this.InputString.Length) {
             this.CurrentCharacter = '\0';
         } else {
-            this.CurrentCharacter = this.InputString[this.CurrentCharacter];
+            this.CurrentCharacter = this.InputString[this.ReadPosition];
         }
 
         this.CurrentPosition = this.ReadPosition;
@@ -128,6 +128,9 @@ public class Lexer {
             case '$':
                 token = this.NewToken(TokenType.DollarSign, this.CurrentCharacter);
                 break;
+            case '=':
+                token = this.NewToken(TokenType.Assign, this.CurrentCharacter);
+                break;
             case ',':
                 token = this.NewToken(TokenType.Comma, this.CurrentCharacter);
                 break;
@@ -152,6 +155,12 @@ public class Lexer {
             case ']':
                 token = this.NewToken(TokenType.RightBracket, this.CurrentCharacter);
                 break;
+            case '<':
+                token = this.NewToken(TokenType.LeftAngleBracket, this.CurrentCharacter);
+                break;
+            case '>':
+                token = this.NewToken(TokenType.RightAngleBracket, this.CurrentCharacter);
+                break;
             case '"':
                 int currentPosition = this.CurrentPosition;
 
@@ -172,15 +181,16 @@ public class Lexer {
                 break;
             default:
                 if (this.CanBeInIdentifier(this.CurrentCharacter, true)) {
-                    token = this.NewToken(TokenType.Identifier, this.ReadIdentifier());
-                } else if (this.IsDigit(this.CurrentCharacter)) {
+                    return this.NewToken(TokenType.Identifier, this.ReadIdentifier());
+                }
+
+                if (this.IsDigit(this.CurrentCharacter)) {
                     (string literal, TokenType numberTokenType) = this.ReadNumber();
 
-                    token = this.NewToken(numberTokenType, literal);
-                } else {
-                    token = this.NewToken(TokenType.Illegal, this.CurrentCharacter);
+                    return this.NewToken(numberTokenType, literal);
                 }
-                break;
+
+                return this.NewToken(TokenType.Illegal, this.CurrentCharacter);
         }
 
         this.ReadChar();
