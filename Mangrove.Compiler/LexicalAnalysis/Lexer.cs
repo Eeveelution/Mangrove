@@ -71,6 +71,22 @@ public class Lexer {
         return '0' <= c && c <= '9';
     }
 
+    private bool IsOperatorSymbol(char c) {
+        return c == '=' ||
+               c == '-' ||
+               c == '+' ||
+               c == '*' ||
+               c == '/' ||
+               c == '<' ||
+               c == '>' ||
+               c == '|' ||
+               c == '^' ||
+               c == '&' ||
+               c == '%' ||
+               c == ':' ||
+               c == '!';
+    }
+
     private bool CanBeInIdentifier(char c, bool identifierBeginning) {
         return c is >= 'a' and <= 'z' || c is >= 'A' and <= 'Z' || c == '_' ||
                //Special handling for numbers in identifiers, they cannot be at the beginning
@@ -96,21 +112,68 @@ public class Lexer {
         int currentPosition = this.CurrentPosition;
 
         while (true) {
-            if (this.IsDigit(this.CurrentCharacter)) {
-                this.ReadChar();
-            } else if (this.CurrentCharacter == '.') {
+            if (this.CurrentCharacter == '.') {
                 numberTokenType = TokenType.Double;
                 this.ReadChar();
             } else if (this.CurrentCharacter == 'f') {
                 numberTokenType = TokenType.Float;
                 this.ReadChar();
                 break;
+            } else if (this.IsDigit(this.CurrentCharacter)) {
+                this.ReadChar();
             } else {
                 break;
             }
         }
 
         return (this.InputString[currentPosition..this.CurrentPosition], numberTokenType);
+    }
+
+    private (string literal, TokenType tokenType) ReadOperator() {
+        string literal = "";
+        TokenType operatorType = TokenType.Illegal;
+
+        while (this.IsOperatorSymbol(this.CurrentCharacter)) {
+            literal += this.CurrentCharacter;
+
+            this.ReadChar();
+        }
+
+        operatorType = literal switch {
+            ":"   => TokenType.Colon,
+            "="   => TokenType.Assign,
+            "+"   => TokenType.Plus,
+            "-"   => TokenType.Minus,
+            "*"   => TokenType.Asterisk,
+            "/"   => TokenType.Slash,
+            "<"   => TokenType.LessThan,
+            ">"   => TokenType.GreaterThan,
+            "|"   => TokenType.Pipe,
+            "^"   => TokenType.Caret,
+            "&"   => TokenType.Ampersand,
+            "%"   => TokenType.Percent,
+            "!"   => TokenType.ExclamationMark,
+            "=="  => TokenType.Equality,
+            "!="  => TokenType.Inequality,
+            "&&"  => TokenType.LogicalAnd,
+            "||"  => TokenType.LogicalOr,
+            "<="  => TokenType.LessOrEqual,
+            ">="  => TokenType.GreaterOrEqual,
+            "+="  => TokenType.PlusAssign,
+            "-="  => TokenType.MinusAssign,
+            "/="  => TokenType.DivisionAssign,
+            "*="  => TokenType.MultiplicationAssign,
+            "%="  => TokenType.ModAssign,
+            "<<=" => TokenType.BitShiftLeftAssign,
+            ">>=" => TokenType.BitShiftRightAssign,
+            "&="  => TokenType.AndAssign,
+            "^="  => TokenType.XorAssign,
+            "|="  => TokenType.OrAssign,
+            "::"  => TokenType.Namespace,
+            _     => operatorType
+        };
+
+        return (literal, operatorType);
     }
 
     public Token NextToken() {
@@ -127,9 +190,6 @@ public class Lexer {
                 break;
             case '$':
                 token = this.NewToken(TokenType.DollarSign, this.CurrentCharacter);
-                break;
-            case '=':
-                token = this.NewToken(TokenType.Assign, this.CurrentCharacter);
                 break;
             case ',':
                 token = this.NewToken(TokenType.Comma, this.CurrentCharacter);
@@ -154,12 +214,6 @@ public class Lexer {
                 break;
             case ']':
                 token = this.NewToken(TokenType.RightBracket, this.CurrentCharacter);
-                break;
-            case '<':
-                token = this.NewToken(TokenType.LeftAngleBracket, this.CurrentCharacter);
-                break;
-            case '>':
-                token = this.NewToken(TokenType.RightAngleBracket, this.CurrentCharacter);
                 break;
             case '"':
                 int currentPosition = this.CurrentPosition;
@@ -188,6 +242,12 @@ public class Lexer {
                     (string literal, TokenType numberTokenType) = this.ReadNumber();
 
                     return this.NewToken(numberTokenType, literal);
+                }
+
+                if (this.IsOperatorSymbol(this.CurrentCharacter)) {
+                    (string literal, TokenType operatorType) = this.ReadOperator();
+
+                    return this.NewToken(operatorType, literal);
                 }
 
                 return this.NewToken(TokenType.Illegal, this.CurrentCharacter);

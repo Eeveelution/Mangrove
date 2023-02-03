@@ -7,7 +7,7 @@ public class Tests {
     [Test]
     public void TestBasicLexing() {
         string testInput = """
-            var<TcpServer> server = [TcpServer newWithAddress: "127.0.0.1" port: 13381];
+            var<TcpServer> server = [::TcpServer newWithAddress: "127.0.0.1" port: 13381];
             var<float> testFloat = 4.5147281f;
             var<double> testDouble = 4.5147281;
         """;
@@ -16,37 +16,39 @@ public class Tests {
 
         Token[] expectedTokens = new [] {
             new Token { TokenType = TokenType.Identifier, Literal = "var"},
-            new Token { TokenType = TokenType.LeftAngleBracket },
+            new Token { TokenType = TokenType.LessThan },
             new Token { TokenType = TokenType.Identifier, Literal = "TcpServer"},
-            new Token { TokenType = TokenType.RightAngleBracket },
+            new Token { TokenType = TokenType.GreaterThan },
             new Token { TokenType = TokenType.Identifier, Literal = "server"},
             new Token { TokenType = TokenType.Assign },
             new Token { TokenType = TokenType.LeftBracket },
+            new Token { TokenType = TokenType.Namespace },
             new Token { TokenType = TokenType.Identifier, Literal = "TcpServer"},
             new Token { TokenType = TokenType.Identifier, Literal = "newWithAddress"},
             new Token { TokenType = TokenType.Colon },
-            new Token { TokenType = TokenType.String, Literal     = "127.0.0.1"},
+            new Token { TokenType = TokenType.String, Literal     = "\"127.0.0.1\""},
             new Token { TokenType = TokenType.Identifier, Literal = "port"},
             new Token { TokenType = TokenType.Colon },
             new Token { TokenType = TokenType.Int, Literal = "13381"},
+            new Token { TokenType = TokenType.RightBracket},
             new Token { TokenType = TokenType.Semicolon},
             //Line 2
             new Token { TokenType = TokenType.Identifier, Literal = "var"},
-            new Token { TokenType = TokenType.LeftAngleBracket },
+            new Token { TokenType = TokenType.LessThan },
             new Token { TokenType = TokenType.Identifier, Literal = "float"},
-            new Token { TokenType = TokenType.RightAngleBracket },
+            new Token { TokenType = TokenType.GreaterThan },
             new Token { TokenType = TokenType.Identifier, Literal = "testFloat"},
             new Token { TokenType = TokenType.Assign },
             new Token { TokenType = TokenType.Float, Literal = "4.5147281f"},
             new Token { TokenType = TokenType.Semicolon},
             //Line 3
             new Token { TokenType = TokenType.Identifier, Literal = "var"},
-            new Token { TokenType = TokenType.LeftAngleBracket },
+            new Token { TokenType = TokenType.LessThan },
             new Token { TokenType = TokenType.Identifier, Literal = "double"},
-            new Token { TokenType = TokenType.RightAngleBracket },
+            new Token { TokenType = TokenType.GreaterThan },
             new Token { TokenType = TokenType.Identifier, Literal = "testDouble"},
             new Token { TokenType = TokenType.Assign },
-            new Token { TokenType = TokenType.Float, Literal = "4.5147281"},
+            new Token { TokenType = TokenType.Double, Literal = "4.5147281"},
             new Token { TokenType = TokenType.Semicolon},
         };
 
