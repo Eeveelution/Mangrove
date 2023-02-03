@@ -77,6 +77,10 @@ public enum TokenType {
     Default,
     Break,
     Use,
+    Class,
+    Static,
+    Array,
+
 
     //Types
     TypeVoid,

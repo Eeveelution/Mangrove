@@ -15,7 +15,7 @@ public class Tests {
         Lexer lexer = new Lexer(testInput);
 
         Token[] expectedTokens = new [] {
-            new Token { TokenType = TokenType.Identifier, Literal = "var"},
+            new Token { TokenType = TokenType.Variable},
             new Token { TokenType = TokenType.LessThan },
             new Token { TokenType = TokenType.Identifier, Literal = "TcpServer"},
             new Token { TokenType = TokenType.GreaterThan },
@@ -33,18 +33,18 @@ public class Tests {
             new Token { TokenType = TokenType.RightBracket},
             new Token { TokenType = TokenType.Semicolon},
             //Line 2
-            new Token { TokenType = TokenType.Identifier, Literal = "var"},
+            new Token { TokenType = TokenType.Variable},
             new Token { TokenType = TokenType.LessThan },
-            new Token { TokenType = TokenType.Identifier, Literal = "float"},
+            new Token { TokenType = TokenType.TypeFloat},
             new Token { TokenType = TokenType.GreaterThan },
             new Token { TokenType = TokenType.Identifier, Literal = "testFloat"},
             new Token { TokenType = TokenType.Assign },
             new Token { TokenType = TokenType.Float, Literal = "4.5147281f"},
             new Token { TokenType = TokenType.Semicolon},
             //Line 3
-            new Token { TokenType = TokenType.Identifier, Literal = "var"},
+            new Token { TokenType = TokenType.Variable},
             new Token { TokenType = TokenType.LessThan },
-            new Token { TokenType = TokenType.Identifier, Literal = "double"},
+            new Token { TokenType = TokenType.TypeDouble},
             new Token { TokenType = TokenType.GreaterThan },
             new Token { TokenType = TokenType.Identifier, Literal = "testDouble"},
             new Token { TokenType = TokenType.Assign },

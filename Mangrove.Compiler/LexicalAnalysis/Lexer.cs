@@ -215,6 +215,9 @@ public class Lexer {
             case ']':
                 token = this.NewToken(TokenType.RightBracket, this.CurrentCharacter);
                 break;
+            case '~':
+                token = this.NewToken(TokenType.Tilde, this.CurrentCharacter);
+                break;
             case '"':
                 int currentPosition = this.CurrentPosition;
 
@@ -235,7 +238,43 @@ public class Lexer {
                 break;
             default:
                 if (this.CanBeInIdentifier(this.CurrentCharacter, true)) {
-                    return this.NewToken(TokenType.Identifier, this.ReadIdentifier());
+                    string literal = this.ReadIdentifier();
+
+                    return literal switch {
+                        "func"    => this.NewToken(TokenType.Function, literal),
+                        "var"     => this.NewToken(TokenType.Variable, literal),
+                        "return"  => this.NewToken(TokenType.Return,   literal),
+                        "if"      => this.NewToken(TokenType.If,       literal),
+                        "else"    => this.NewToken(TokenType.Else,     literal),
+                        "true"    => this.NewToken(TokenType.True,     literal),
+                        "false"   => this.NewToken(TokenType.False,    literal),
+                        "while"   => this.NewToken(TokenType.While,    literal),
+                        "for"     => this.NewToken(TokenType.For,      literal),
+                        "switch"  => this.NewToken(TokenType.Switch,   literal),
+                        "case"    => this.NewToken(TokenType.Case,     literal),
+                        "default" => this.NewToken(TokenType.Default,  literal),
+                        "break"   => this.NewToken(TokenType.Break,    literal),
+                        "use"     => this.NewToken(TokenType.Use,      literal),
+                        "class"   => this.NewToken(TokenType.Class,    literal),
+                        "static"  => this.NewToken(TokenType.Static,   literal),
+                        "arr"     => this.NewToken(TokenType.Array,    literal),
+
+                        //Types
+                        "void"   => this.NewToken(TokenType.TypeVoid,   literal),
+                        "int64"  => this.NewToken(TokenType.TypeInt64,  literal),
+                        "int32"  => this.NewToken(TokenType.TypeInt32,  literal),
+                        "int16"  => this.NewToken(TokenType.TypeInt16,  literal),
+                        "sbyte"  => this.NewToken(TokenType.TypeInt8,   literal),
+                        "uint64" => this.NewToken(TokenType.TypeUint64, literal),
+                        "uint32" => this.NewToken(TokenType.TypeUint32, literal),
+                        "uint16" => this.NewToken(TokenType.TypeUint16, literal),
+                        "byte"   => this.NewToken(TokenType.TypeUint8,  literal),
+                        "string" => this.NewToken(TokenType.TypeString, literal),
+                        "float"  => this.NewToken(TokenType.TypeFloat,  literal),
+                        "double" => this.NewToken(TokenType.TypeDouble, literal),
+
+                        _ => this.NewToken(TokenType.Identifier, literal)
+                    };
                 }
 
                 if (this.IsDigit(this.CurrentCharacter)) {
