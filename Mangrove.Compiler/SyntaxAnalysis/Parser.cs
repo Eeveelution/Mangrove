@@ -54,40 +54,6 @@ public class Parser {
             throw new InvalidVariableType(typeLiteral.Line, typeLiteral.Column, typeLiteral);
         }
 
-        /* WIP Array implementation
-
-        if (typeLiteral.TokenType == TokenType.Array) {
-            this.ReadToken(); //arr
-
-            if (this.CurrentToken.TokenType != TokenType.GreaterThan) {
-                throw new ExpectedTypeParameterOnArray(this.CurrentToken.Line, this.CurrentToken.Column);
-            }
-
-            this.ReadToken(); //<
-
-            Token arrayTypeLiteral = this.CurrentToken;
-
-            if (!allowedTypesAndConversion.ContainsKey(arrayTypeLiteral.TokenType)) {
-                throw new InvalidVariableType(arrayTypeLiteral.Line, arrayTypeLiteral.Column, arrayTypeLiteral);
-            }
-
-            this.ReadToken(); // type
-
-            if (this.CurrentToken.TokenType == TokenType.Comma) {
-                this.ReadToken(); //,
-
-                Token lengthToken = this.CurrentToken;
-
-
-
-                returnVariable.TypeValue = new TypeValue(arrayTypeLiteral, lengthToken.Literal)
-            } else {
-
-            }
-        }
-
-        */
-
         this.ReadToken(); //>
 
         Token nameLiteral = this.CurrentToken;
@@ -95,15 +61,50 @@ public class Parser {
         if (nameLiteral.TokenType != TokenType.Identifier) {
             throw new ExpectedNameOnVariable(this.CurrentToken.Line, this.CurrentToken.Column);
         }
+
+        this.ReadToken();
     }
 
-    public Expression ParseNextExpression(OperatorPrescedence prescedence = OperatorPrescedence.Lowest) {
+    public Expression ParseNextExpression(ExpressionOperatorPrescedence prescedence = ExpressionOperatorPrescedence.Lowest) {
         Expression expression = default;
 
         switch (this.CurrentToken.TokenType) {
             case TokenType.Variable:
                 ExpressionValue.Variable variable = this.ParseVariable();
                 break;
+        }
+
+        while (true) {
+            this.ReadToken();
+
+            if (this.CurrentToken.TokenType == TokenType.EndOfFile) {
+                break;
+            }
+
+            Token currentToken = this.CurrentToken;
+
+            if (currentToken.IsOperator) {
+                ExpressionOperator expressionOperator = ExpressionOperator.FromTokenType(currentToken.TokenType);
+
+                if ((expressionOperator.Type & ExpressionOperatorType.Infix) == 0)
+                    throw new InvalidInfixOperator(this.CurrentToken.Line, this.CurrentToken.Column, this.CurrentToken);
+
+                if (prescedence >= expressionOperator.Prescedence)
+                    break;
+
+                this.ReadToken();
+
+
+                expression = new Expression(
+                    new ExpressionValue.InfixExpression(
+                        expressionOperator,
+                        expression,
+                        this.ParseNextExpression(expressionOperator.Prescedence)
+                        )
+                    );
+            } else {
+
+            }
         }
     }
 }

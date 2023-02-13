@@ -153,6 +153,8 @@ public class Lexer {
             "&"   => TokenType.Ampersand,
             "%"   => TokenType.Percent,
             "!"   => TokenType.ExclamationMark,
+            ">>"  => TokenType.BitShiftRight,
+            "<<"  => TokenType.BitShiftLeft,
             "=="  => TokenType.Equality,
             "!="  => TokenType.Inequality,
             "&&"  => TokenType.LogicalAnd,
@@ -163,7 +165,7 @@ public class Lexer {
             "-="  => TokenType.MinusAssign,
             "/="  => TokenType.DivisionAssign,
             "*="  => TokenType.MultiplicationAssign,
-            "%="  => TokenType.ModAssign,
+            "%="  => TokenType.RemAssign,
             "<<=" => TokenType.BitShiftLeftAssign,
             ">>=" => TokenType.BitShiftRightAssign,
             "&="  => TokenType.AndAssign,
@@ -290,7 +292,10 @@ public class Lexer {
                 if (this.IsOperatorSymbol(this.CurrentCharacter)) {
                     (string literal, TokenType operatorType) = this.ReadOperator();
 
-                    return this.NewToken(operatorType, literal);
+                    Token returnToken = this.NewToken(operatorType, literal);
+                    returnToken.IsOperator = true;
+
+                    return returnToken;
                 }
 
                 return this.NewToken(TokenType.Illegal, this.CurrentCharacter);

@@ -28,6 +28,8 @@ public enum TokenType {
     Percent,
     ExclamationMark,
     Tilde,
+    BitShiftLeft,
+    BitShiftRight,
 
     //Multichar Operators
     Equality,
@@ -41,7 +43,7 @@ public enum TokenType {
     MinusAssign,
     MultiplicationAssign,
     DivisionAssign,
-    ModAssign,
+    RemAssign,
     BitShiftLeftAssign,
     BitShiftRightAssign,
     AndAssign,
@@ -106,4 +108,5 @@ public struct Token {
     public TokenType TokenType;
     public string    Literal;
     public int       Line, Column;
+    public bool      IsOperator;
 }

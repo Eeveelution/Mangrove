@@ -1,7 +1,8 @@
 namespace Mangrove.Compiler.SyntaxAnalysis;
 
 public abstract record ExpressionValue {
-    public record Variable(TypeValue TypeValue, string Name);
+    public record Variable(TypeValue TypeValue, string Name) : ExpressionValue;
+    public record InfixExpression(ExpressionOperator Operator, Expression Left, Expression Right) : ExpressionValue;
 }
 
 public class Expression {
