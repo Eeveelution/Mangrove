@@ -260,18 +260,22 @@ public class Lexer {
                         "arr"     => this.NewToken(TokenType.Array,    literal),
 
                         //Types
-                        "void"   => this.NewToken(TokenType.TypeVoid,   literal),
-                        "int64"  => this.NewToken(TokenType.TypeInt64,  literal),
-                        "int32"  => this.NewToken(TokenType.TypeInt32,  literal),
-                        "int16"  => this.NewToken(TokenType.TypeInt16,  literal),
-                        "sbyte"  => this.NewToken(TokenType.TypeInt8,   literal),
-                        "uint64" => this.NewToken(TokenType.TypeUint64, literal),
-                        "uint32" => this.NewToken(TokenType.TypeUint32, literal),
-                        "uint16" => this.NewToken(TokenType.TypeUint16, literal),
-                        "byte"   => this.NewToken(TokenType.TypeUint8,  literal),
-                        "string" => this.NewToken(TokenType.TypeString, literal),
-                        "float"  => this.NewToken(TokenType.TypeFloat,  literal),
-                        "double" => this.NewToken(TokenType.TypeDouble, literal),
+                        "void"    => this.NewToken(TokenType.TypeVoid,   literal),
+                        "int64"   => this.NewToken(TokenType.TypeInt64,  literal),
+                        "int32"   => this.NewToken(TokenType.TypeInt32,  literal),
+                        "int16"   => this.NewToken(TokenType.TypeInt16,  literal),
+                        "int8"    => this.NewToken(TokenType.TypeInt8,   literal),
+                        "sbyte"   => this.NewToken(TokenType.TypeInt8,   literal),
+                        "uint64"  => this.NewToken(TokenType.TypeUint64, literal),
+                        "uint32"  => this.NewToken(TokenType.TypeUint32, literal),
+                        "uint16"  => this.NewToken(TokenType.TypeUint16, literal),
+                        "uint8"   => this.NewToken(TokenType.TypeUint8,  literal),
+                        "byte"    => this.NewToken(TokenType.TypeUint8,  literal),
+                        "string"  => this.NewToken(TokenType.TypeString, literal),
+                        "float"   => this.NewToken(TokenType.TypeFloat,  literal),
+                        "float32" => this.NewToken(TokenType.TypeFloat,  literal),
+                        "double"  => this.NewToken(TokenType.TypeDouble, literal),
+                        "float64" => this.NewToken(TokenType.TypeDouble, literal),
 
                         _ => this.NewToken(TokenType.Identifier, literal)
                     };
@@ -295,5 +299,13 @@ public class Lexer {
         this.ReadChar();
 
         return token;
+    }
+
+    public IEnumerable<Token> GetTokenEnumerator() {
+        Token token;
+
+        while ((token = this.NextToken()).TokenType != TokenType.EndOfFile) {
+            yield return token;
+        }
     }
 }
